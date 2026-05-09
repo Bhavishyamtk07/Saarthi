@@ -1,0 +1,48 @@
+services:
+  # ==================== AI Service (Python/FastAPI) ====================
+  - type: web
+    name: saarthi-ai-service
+    runtime: python
+    rootDir: ai-service
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: AI_MODEL
+        value: gpt-3.5-turbo
+      - key: PORT
+        value: 10000
+
+  # ==================== Backend (Spring Boot) ====================
+  - type: web
+    name: saarthi-backend
+    runtime: java
+    rootDir: backend
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/*.jar
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: AI_SERVICE_URL
+        fromService:
+          name: saarthi-ai-service
+          type: web
+          property: host
+
+  # ==================== Frontend (React/Vite) ====================
+  - type: web
+    name: saarthi-frontend
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npx serve dist -l $PORT
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: VITE_API_URL
+        fromService:
+          name: saarthi-backend
+          type: web
+          property: host
