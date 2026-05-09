@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+build/
+*.jar
+target/
+
+# Environment variables (NEVER commit API keys!)
+.env
+.env.local
+.env.production
+ai-service/.env
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Java
+backend/target/
+backend/data/
+*.class
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.venv/
+
+# H2 Database files
+*.db
+*.mv.db
+*.trace.db
